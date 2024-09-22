@@ -1,16 +1,29 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "@/components/aceternity_ui/label";
 import { Input } from "@/components/aceternity_ui/input";
 import { cn } from "@/lib/utils";
 import { BoxesCore } from "@/components/aceternity_ui/background-boxes";
+import { useFormState, useFormStatus } from "react-dom";
+import { handleRegister, redirectGithub, redirectFacebook, redirectGoogle } from "./ServerAction";
+import { ZodErrors } from "@/components/ZodErrors";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 export default function SignupFormDemo() {
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
+  const [state, formAction] = useFormState(handleRegister, {})
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if(state?.message != undefined) {
+      console.log(state)
+      setCookie('token', state.accessToken)
+      setCookie('user', state.user)
+      router.push('/Dashboard/Home')
+    }
+  }, [state?.message])
 
   return (
     <>
@@ -21,40 +34,40 @@ export default function SignupFormDemo() {
         <h1 className="text-2xl font-semibold text-center my-4">Register</h1>
         <p className="leading-5 text-sm">Fill up all of the necessary data in order to create your new account and buy products or make an appointment for a service.</p>
 
-        <form action="" className="grid grid-cols-12 gap-4 my-8">
+        <form action={formAction} className="grid grid-cols-12 gap-4 my-8">
           <div className="col-span-12 space-y-4">
             <LabelInputContainer>
               <Label htmlFor="firstname">First name</Label>
-              <Input id="firstname" placeholder="Juan" type="text" />
+              <Input id="firstname" name="first_name" placeholder="Juan" type="text" />
+              <ZodErrors error={state?.zodErrors?.first_name} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="middlename">Middle name</Label>
-              <Input id="middlename" placeholder="Dela" type="text" />
+              <Input id="middlename" name="middle_name" placeholder="Dela" type="text" />
+              <ZodErrors error={state?.zodErrors?.middle_name} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="lastname">Last name</Label>
-              <Input id="lastname" placeholder="Cruz" type="text" />
+              <Input id="lastname" name="last_name" placeholder="Cruz" type="text" />
+              <ZodErrors error={state?.zodErrors?.last_name} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="Juan@sample.com" type="text" />
+              <Input id="email" name="email" placeholder="Juan@sample.com" type="text" />
+              <ZodErrors error={state?.zodErrors?.email} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" placeholder="******" type="password" />
+              <Input id="password" name="password" placeholder="******" type="password" />
+              <ZodErrors error={state?.zodErrors?.password} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="confirm_password">Confirm Password</Label>
-              <Input id="confirm_password" placeholder="******" type="password" />
+              <Input id="confirm_password" name="confirm_password" placeholder="******" type="password" />
+              <ZodErrors error={state?.zodErrors?.confirm_password} />
             </LabelInputContainer>
             <div className="grid">
-              <button
-                className="bg-primary rounded-md h-10 font-medium hover:bg-secondary transition ease-out duration-400"
-                type="submit"
-              >
-                Sign up &rarr;
-                <BottomGradient />
-              </button>
+              <SubmitButton/>
             </div>
           </div>
         </form>
@@ -69,6 +82,11 @@ export default function SignupFormDemo() {
           <button
             className="bg-secondary border-2 rounded-md h-10 font-medium"
             type="button"
+            onClick={async () => {
+              setLoading(!loading)
+              redirectGithub().then(res => res)
+            }}
+            disabled={loading}
           >
             <svg
                 data-v-54e46119=""
@@ -93,6 +111,11 @@ export default function SignupFormDemo() {
           <button
             className="bg-secondary border-2 rounded-md h-10 font-medium"
             type="button"
+            onClick={async () => {
+              setLoading(!loading)
+              redirectGoogle().then(res => res)
+            }}
+            disabled={loading}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="22" viewBox="0 0 256 262" className="mx-auto">
                   <path fill="#4285f4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"/>
@@ -106,6 +129,11 @@ export default function SignupFormDemo() {
           <button
             className="bg-secondary border-2 rounded-md h-10 font-medium"
             type="button"
+            onClick={async () => {
+              setLoading(!loading)
+              redirectFacebook().then(res => res)
+            }}
+            disabled={loading}
           >
             <svg width="30" height="24" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" className="mx-auto">
                 <path fill="#1877F2" d="M15 8a7 7 0 00-7-7 7 7 0 00-1.094 13.915v-4.892H5.13V8h1.777V6.458c0-1.754 1.045-2.724 2.644-2.724.766 0 1.567.137 1.567.137v1.723h-.883c-.87 0-1.14.54-1.14 1.093V8h1.941l-.31 2.023H9.094v4.892A7.001 7.001 0 0015 8z"/>
@@ -119,6 +147,26 @@ export default function SignupFormDemo() {
     </div>
     </>
   );
+}
+
+const SubmitButton = () => {
+  
+  const status = useFormStatus()
+
+  return (
+    <button
+      className={cn(`rounded-md h-10 font-medium flex justify-center gap-2 items-center hover:bg-secondary hover:text-black transition ease-out duration-400`, status.pending ? `bg-secondary text-black opacity-50` : `bg-primary text-white`)}
+      type="submit"
+      disabled={status.pending ? true : false}
+    >
+      {(status.pending ? true : false) && <svg aria-hidden="true" className="w-5 h-5 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+            </svg>}
+      Sign up &rarr;
+      <BottomGradient />
+  </button>
+  )
 }
 
 const BottomGradient = () => {

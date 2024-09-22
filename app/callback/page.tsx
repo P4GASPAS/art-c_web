@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 // import { githubGetToken } from "@/services/ServerAction"
 import { useEffect } from "react"
-// import { setCookie } from "cookies-next"
+import { setCookie } from "cookies-next"
 
 const page = () => {
 
