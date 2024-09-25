@@ -1,8 +1,8 @@
-import WelcomeCard from "@/app/Dashboard/Home/WelcomeCard"
-import SalesCard from "@/app/Dashboard/Home/SalesCard"
-import InvestCard from "@/app/Dashboard/Home/InvestCard"
-import RecentOrderCard from "@/app/Dashboard/Home/RecentOrderCard"
-import DailySalesTable from "@/app/Dashboard/Home/DailySalesTable"
+import WelcomeCard from "@/app/Admin/Dashboard/Home/WelcomeCard"
+import SalesCard from "@/app/Admin/Dashboard/Home/SalesCard"
+import InvestCard from "@/app/Admin/Dashboard/Home/InvestCard"
+import RecentOrderCard from "@/app/Admin/Dashboard/Home/RecentOrderCard"
+import DailySalesTable from "@/app/Admin/Dashboard/Home/DailySalesTable"
 
 const Home = () => {
   return (

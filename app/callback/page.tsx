@@ -1,8 +1,7 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation"
-// import { githubGetToken } from "@/services/ServerAction"
+import { githubGetToken } from "@/app/callback/ServerAction"
 import { useEffect } from "react"
-import { setCookie } from "cookies-next"
 
 const page = () => {
 
@@ -10,16 +9,15 @@ const page = () => {
     const code = searchParams.get('code')
     const router = useRouter()
 
-    // useEffect(() => {
-    //     if (code != null || code != undefined) {
-    //         const resData = githubGetToken(code)
-    //         resData.then(res => {
-    //             setCookie('accessToken', res.data.accessToken)
-    //             setCookie('user', res.data.user)
-    //             router.push('/dashboard')
-    //         })
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (code != null || code != undefined) {
+            githubGetToken(code)
+            // const resData = githubGetToken(code)
+            // resData.then(res => {
+            //     router.push('/callback/setup')
+            // })
+        }
+    }, [])
 
   return (
     <>

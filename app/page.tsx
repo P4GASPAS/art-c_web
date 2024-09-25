@@ -1,6 +1,11 @@
-import Navbar from "@/components/Navbar"
-import Hero from "@/components/Hero"
-import Footer from "@/components/Footer"
+import Navbar from "@/app/Navbar"
+import Hero from "@/app/Hero"
+import Marquee from "./Marquee";
+import LandingCards from "./LandingCards";
+import AboutUs from "./AboutUs";
+import LandingStory from "./LandingStory";
+import EmailUs from "./EmailUs";
+import Footer from "@/app/Footer"
 
 export default function Home() {
 
@@ -8,6 +13,11 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <Marquee />
+      <LandingCards />
+      <AboutUs />
+      <LandingStory />
+      <EmailUs />
       <Footer />
     </>
   );

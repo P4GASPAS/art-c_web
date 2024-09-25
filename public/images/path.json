@@ -1,3 +1,4 @@
 {
-    "login": "/images/login.jpg"
+    "login": "/images/login.jpg",
+    "landing_about_image": "/images/landing_about_image.jpg"
 }

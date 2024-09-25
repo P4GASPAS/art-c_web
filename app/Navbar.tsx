@@ -13,7 +13,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-white absolute z-10 w-full md:static">
+    <nav className="bg-primary-foreground absolute z-10 w-full md:static">
       <div className="flex justify-between px-4 py-4 items-center md:hidden">
         <Link href={''} className="flex items-center gap-2">
           <Image

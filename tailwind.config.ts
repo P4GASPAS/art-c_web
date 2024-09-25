@@ -67,9 +67,14 @@ const config: Config = {
 				"0%": { transform: "translateY(-200%)" },
 				"100%": { transform: "translateY(0%)" },
 			},
+			marquee: {
+				"0%": { transform: "translateX(8.3%)" },
+				"100%": { transform: "translateX(-100%)" },
+			},
 		},
 		animation: {
 			navShow: "navShow 0.3s ease",
+			marquee: "marquee 20s linear infinite",
 		},
   	}
   },

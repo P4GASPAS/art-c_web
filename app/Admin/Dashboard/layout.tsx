@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
-import UserNav from "@/components/UserNav"
-import Sidebar from "@/components/Sidebar"
+import UserNav from "@/app/Admin/Dashboard/UserNav"
+import Sidebar from "@/app/Admin/Dashboard/Sidebar"
 
 const DashboardLayout = ({ children }: {children: ReactNode}) => {
 
